@@ -70,7 +70,7 @@ results = client.query("SELECT
   ERRORS, WARNINGS, ROWS_AFFECTED, ROWS_SENT, ROWS_EXAMINED, CREATED_TMP_DISK_TABLES,
   CREATED_TMP_TABLES, SELECT_FULL_JOIN, SELECT_FULL_RANGE_JOIN, SELECT_RANGE, SELECT_RANGE_CHECK,
   SELECT_SCAN, SORT_MERGE_PASSES, SORT_RANGE, SORT_ROWS, SORT_SCAN, NO_INDEX_USED, NO_GOOD_INDEX_USED
-FROM performance_schema.events_statements_history_long AS history
+FROM performance_schema.events_statements_history AS history
 WHERE DATE_FORMAT(DATE_SUB(NOW(),INTERVAL (SELECT VARIABLE_VALUE FROM information_schema.global_status WHERE variable_name='UPTIME')-TIMER_START*10e-13 second),'%Y-%m-%d %T') >= DATE_SUB(NOW(), INTERVAL 10 SECOND);")
 results.each do |row|
    puts row.to_json
@@ -80,7 +80,7 @@ results = client.query("SELECT
   THREAD_ID, EVENT_ID, EVENT_NAME AS WAITS_EVENT_NAME, TIMER_WAIT, SPINS,
   OBJECT_SCHEMA, OBJECT_NAME, INDEX_NAME,
   OBJECT_TYPE, OPERATION, NUMBER_OF_BYTES
-FROM performance_schema.events_waits_history_long
+FROM performance_schema.events_waits_history
 WHERE DATE_FORMAT(DATE_SUB(NOW(),INTERVAL (SELECT VARIABLE_VALUE FROM information_schema.global_status WHERE variable_name='UPTIME')-TIMER_START*10e-13 second),'%Y-%m-%d %T') >= DATE_SUB(NOW(), INTERVAL 10 SECOND);")
 results.each do |row|
    puts row.to_json

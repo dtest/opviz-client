@@ -28,6 +28,22 @@ parser = OptionParser.new do|opts|
     options[:ini] = inifile;
   end
 
+  opts.on('-u', '--user user', 'User') do |db_user|
+    options[:db_user] = db_user;
+  end
+
+  opts.on('-p', '--password password', 'Password') do |db_password|
+    options[:db_user] = db_password;
+  end
+
+  opts.on('-S', '--socket socket', 'Socket') do |socket|
+    options[:socket] = socket;
+  end
+
+  opts.on('-H', '--host host', 'Host') do |host|
+    options[:host] = host;
+  end
+
   opts.on('-h', '--help', 'Displays Help') do
     puts opts
     exit
@@ -36,19 +52,17 @@ end
 
 parser.parse!
 
+# Set appropriate connection options
 if options[:ini]
   ini = IniFile.load(options[:ini])
   section = ini['client']
-  db_user = section['user']
-  db_pass = section['password']
-  socket = section['socket']
-else
-  db_user = "root"
-  db_pass = ""
-  socket = ""
+  options[:db_user] = section['user']
+  options[:db_password] = section['password']
+  options[:socket] = section['socket']
+  options[:host] = section['host']
 end
 
-client = Mysql2::Client.new(:username => db_user, :password => db_pass, :socket => socket)
+client = Mysql2::Client.new(:username => options[:db_user], :password => options[:db_password], :host => options[:host], :socket => options[:socket])
 results = client.query("SELECT
   THREAD_ID, EVENT_ID, EVENT_NAME AS STATEMENTS_EVENT_NAME, DIGEST, DIGEST_TEXT,
   TIMER_WAIT, CURRENT_SCHEMA, OBJECT_SCHEMA, OBJECT_TYPE, OBJECT_NAME, MYSQL_ERRNO,

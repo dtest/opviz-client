@@ -33,7 +33,7 @@ parser = OptionParser.new do|opts|
   end
 
   opts.on('-p', '--password password', 'Password') do |db_password|
-    options[:db_user] = db_password;
+    options[:db_password] = db_password;
   end
 
   opts.on('-S', '--socket socket', 'Socket') do |socket|
